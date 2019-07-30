@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>json to default</title>
+    <style>
+      html {
+        height: 100%;
+        width: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        width: 100%;
+      }
+      textarea {
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea name="" id="src"></textarea>
+    <div style="width: 20px"></div>
+    <textarea name="" id="output"></textarea>
+  </body>
+  <script>
+    var defaultValueMap = {
+      number: 0,
+      string: '',
+      boolean: false,
+      object: '错误',
+    }
+    function jsonToDefault(json) {
+      var checkIsObject = function(v) {
+        return !Array.isArray(v) && typeof v === 'object'
+      }
+      var loop = function(json) {
+        var result = {}
+        if (!json || typeof json !== 'object') {
+          return json
+        }
+        Object.keys(json).forEach(function(key) {
+          if (checkIsObject(json[key])) {
+            result[key] = loop(json[key])
+          } else if (Array.isArray(json[key])) {
+            if (json[key].length) {
+              result[key] = [loop(json[key][0])]
+            } else {
+              result[key] = []
+            }
+          } else {
+            result[key] = defaultValueMap[typeof json[key]]
+          }
+        })
+        return result
+      }
+      return JSON.stringify(loop(json), null, 2)
+    }
+    document.getElementById('src').addEventListener('input', function(e) {
+      let json = undefined
+      let err = undefined
+      try {
+        json = JSON.parse(e.target.value)
+      } catch (error) {
+        err = error
+      }
+      if (err === undefined) {
+        document.getElementById('output').value = jsonToDefault(json)
+      } else {
+        document.getElementById('output').value = `json 无法解析`
+      }
+    })
+  </script>
+</html>
