@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>json to default</title>
     <style>
-      html {
+      html,
+      body {
         height: 100%;
         width: 100%;
+        overflow: hidden;
       }
       body {
         display: flex;
         flex-direction: row;
-        height: 100%;
-        width: 100%;
       }
       textarea {
         flex: 1;
@@ -22,9 +22,9 @@
     </style>
   </head>
   <body>
-    <textarea name="" id="src"></textarea>
-    <div style="width: 20px"></div>
-    <textarea name="" id="output"></textarea>
+    <textarea name="" id="src" placeholder="json"></textarea>
+    <div style="width: 10px"></div>
+    <textarea name="" id="output" placeholder="output"></textarea>
   </body>
   <script>
     var defaultValueMap = {
@@ -40,7 +40,14 @@
       var loop = function(json) {
         var result = {}
         if (!json || typeof json !== 'object') {
-          return json
+          return defaultValueMap[typeof json]
+        }
+        if (Array.isArray(json)) {
+          if (json.length) {
+            return [loop(json[0])]
+          } else {
+            return []
+          }
         }
         Object.keys(json).forEach(function(key) {
           if (checkIsObject(json[key])) {
@@ -60,10 +67,14 @@
       return JSON.stringify(loop(json), null, 2)
     }
     document.getElementById('src').addEventListener('input', function(e) {
+      var value = (e.target.value + '').trim()
+      if (!value) {
+        return
+      }
       let json = undefined
       let err = undefined
       try {
-        json = JSON.parse(e.target.value)
+        json = JSON.parse(value)
       } catch (error) {
         err = error
       }
