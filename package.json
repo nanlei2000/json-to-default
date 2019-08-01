@@ -1,0 +1,25 @@
+{
+  "name": "json-to-default",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "tslint-config-prettier": "^1.18.0",
+    "tslint": "^5.18.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nanlei2000/json-to-default.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nanlei2000/json-to-default/issues"
+  },
+  "homepage": "https://github.com/nanlei2000/json-to-default#readme"
+}
